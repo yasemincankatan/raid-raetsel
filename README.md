@@ -1,1 +1,90 @@
 # raid-raetsel
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zahlenschlossrätsel – Serverraum</title>
+<style>
+body{font-family:Arial,sans-serif;background:#1f2430;color:#fff;margin:0;padding:30px}
+h1{text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;max-width:1000px;margin:auto}
+.card{background:#2d3445;padding:18px;border-radius:12px;text-align:center;border:2px solid #555}
+.card.open{border-color:#36c56a;background:#1f4630}
+.icon{font-size:56px}
+input{width:90%;padding:10px;font-size:22px;text-align:center}
+button{margin-top:10px;padding:10px 18px;font-size:16px;cursor:pointer}
+#server{display:none;max-width:1000px;margin:30px auto;background:#203528;padding:25px;border-radius:12px}
+textarea{width:100%;height:120px;margin-top:8px}
+.task{background:#2b3330;padding:15px;border-radius:10px;margin:15px 0}
+</style>
+</head>
+<body>
+<h1>🔐 Zahlenschlossrätsel für den Zugang zum Serverraum</h1>
+<p style="text-align:center">Öffne alle vier RAID-Schlösser.</p>
+<div class="grid" id="grid"></div>
+
+<section id="server">
+<h2>🖥️ Willkommen im Serverraum!</h2>
+<p>Alle Schlösser wurden geöffnet. So arbeitet ihr zusammen (Gruppenpuzzle)
+1)	Expertise aufbauen (10 Minuten): Jedes Gruppenmitglied sucht sich eine der vier Stationen aus und erarbeitet sich das Wissen zu diesem Fachbegriff.
+2)	Wissen austauschen: Trefft euch nach 10 Minuten wieder in eurer Stammgruppe. Jeder Experte erklärt den anderen kurz sein Thema.
+3)	Aufgaben lösen: Bearbeitet anschließend gemeinsam die folgenden Aufgaben: 1-3.
+Bearbeitet nun den Praxisfall und beantwortet die Aufgaben.</p>
+
+<div class="task"><h3>Praxisfall</h3>
+<p>Die Festplatte 3 im RAID‑5‑Array ist ausgefallen. Die Buchhaltung läuft weiter und heute Abend stehen Datensicherungen an.</p></div>
+
+<div class="task"><h3>Aufgabe 1</h3>
+<p>Warum läuft der Server trotz der defekten Festplatte weiter?</p>
+<textarea></textarea></div>
+
+<div class="task"><h3>Aufgabe 2</h3>
+<p>Wie tauscht man die Festplatte aus, ohne den Server herunterzufahren? Welches Hardware-Feature wird benötigt?</p>
+<textarea></textarea></div>
+
+<div class="task"><h3>Aufgabe 3</h3>
+<p>Reicht RAID 5 bei einem Ransomware-Angriff aus? Begründe.</p>
+<textarea></textarea></div>
+</section>
+
+<script>
+const locks=[
+{name:"RAID 0",code:"0739"},
+{name:"RAID 1",code:"1542"},
+{name:"RAID 5",code:"8601"},
+{name:"RAID 10",code:"9170"}
+];
+const grid=document.getElementById("grid");
+locks.forEach((l,i)=>{
+const d=document.createElement("div");
+d.className="card";
+d.innerHTML=`<div class="icon">🔒</div><h2>${l.name}</h2>
+<input maxlength="4"><br><button>Prüfen</button><p></p>`;
+const input=d.querySelector("input");
+const btn=d.querySelector("button");
+btn.onclick=()=>{
+if(input.value===l.code){
+d.classList.add("open");
+d.querySelector(".icon").textContent="🔓";
+btn.disabled=true;
+input.disabled=true;
+d.querySelector("p").textContent="Richtig!";
+check();
+}else{
+d.querySelector("p").textContent="Falscher Code!";
+input.value="";
+}
+};
+grid.appendChild(d);
+});
+function check(){
+if(document.querySelectorAll(".card.open").length===4){
+document.getElementById("server").style.display="block";
+document.getElementById("server").scrollIntoView({behavior:"smooth"});
+}
+}
+</script>
+</body>
+</html>
